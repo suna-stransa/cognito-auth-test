@@ -10,9 +10,11 @@
     "aws-amplify": "^3.0.17",
     "aws-amplify-react": "^4.1.16",
     "axios": "^0.19.2",
+    "axios-cookiejar-support": "^1.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.1",
+    "universal-cookie": "^4.0.3"
   },
   "scripts": {
     "start": "react-scripts start",

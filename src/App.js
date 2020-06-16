@@ -3,6 +3,9 @@ import logo from './logo.svg';
 import './App.css';
 
 import axios from 'axios';
+import AxiosCookiejarSupport from 'axios-cookiejar-support';
+
+import Cookies from 'universal-cookie';
 
 import { withAuthenticator } from 'aws-amplify-react'; // ログイン画面のモジュールの読み込み
 import Amplify, { Auth } from 'aws-amplify';           // amplifyのモジュールの読み込み
@@ -16,8 +19,13 @@ function App() {
   }
 
   useEffect(() => {
-    const response = axios.get("https://rzl4a40l77.execute-api.ap-northeast-1.amazonaws.com/demo?authKey=uuid");
-    console.log(response);
+    fetch('https://rzl4a40l77.execute-api.ap-northeast-1.amazonaws.com/demo?authKey=uuid', {
+        credentials: 'include',
+    })
+    .then(res => res.json())
+    .then(res => {
+        console.log(res);
+    })
   }, []);
 
   return (
