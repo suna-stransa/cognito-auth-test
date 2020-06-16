@@ -16,7 +16,7 @@ function App() {
   }
 
   useEffect(() => {
-    const response = axios.get("https://rzl4a40l77.execute-api.ap-northeast-1.amazonaws.com/demo?TestId=1");
+    const response = axios.get("https://rzl4a40l77.execute-api.ap-northeast-1.amazonaws.com/demo?authKey=uuid");
     console.log(response);
   }, []);
 
