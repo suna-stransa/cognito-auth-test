@@ -1,79 +1,37 @@
-import React, { useEffect } from 'react';
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import {AuthContext} from './AuthContext';
 
-import { withAuthenticator } from 'aws-amplify-react'; // ログイン画面のモジュールの読み込み
-import Amplify, { Auth } from 'aws-amplify';           // amplifyのモジュールの読み込み
+// import { withAuthenticator } from 'aws-amplify-react'; // ログイン画面のモジュールの読み込み
+import Amplify from 'aws-amplify';           // amplifyのモジュールの読み込み
 import aws_exports from './aws-exports';               // 設定情報を読み込みます。
 Amplify.configure(aws_exports);                        // 設定情報をAmplifyに反映させます。
 
-function App() {
-  const sessionId = Auth.user ? Auth.user.signInUserSession.idToken.payload.sessionId : "" ;
-  // const authKey = Auth.user.signInUserSession.idToken.payload.authKey;
+function App({match: {params: { redirect }}}) {
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [error, setError] = React.useState('');
+  const {login} = React.useContext(AuthContext);
 
-  // ログアウトボタンの準備
-  const signOut = () => {
-    Auth.signOut()
-    fetch('https://tooap4mvb3.execute-api.ap-northeast-1.amazonaws.com/demo', {
-      method: 'POST',
-      body: JSON.stringify({ "sessionId": `${sessionId}`, "logout": "true" }),
-      credentials: 'include',
-    })
-    .then(res => res.json())
-    .then(res => {
-      document.cookie = 'sso-authenticated=false';
-      window.location.assign('http://localhost:3000');
-    })
-    .catch(err => {
-      console.log(err);
-    })
-  }
-
-  //cookieある時
-  useEffect(() => {
-    //sso-authenticated=trueの時はAPIを叩く
-    if (document.cookie === 'sso-authenticated=true') {
-      fetch('https://tooap4mvb3.execute-api.ap-northeast-1.amazonaws.com/demo', {
-        method: 'POST',
-        body: JSON.stringify({ "sessionId": `${sessionId}` }),
-        credentials: 'include',
-      })
-      .then(res => res.json())
-      .then(res => {
-          console.log(res);
-      })
-      .catch(err => console.log(err))
-    } else { //sso-authenticated=trueではない(falseとかそもそもないとか)時は認証アプリにリダイレクト
-      window.location.assign('http://localhost:3000');
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const err = await login(email, password) //loginが成功したらfalseがreturnされる
+    if(!err) {
+      window.location.href = decodeURIComponent(redirect) || 'http://localhost:3001';
+    } else {
+      setError(err);
     }
-  }, []);
-
-  //cookieない時
-  const apiHandler = () => {
-    fetch('https://tooap4mvb3.execute-api.ap-northeast-1.amazonaws.com/demo', {
-      method: 'POST',
-      body: JSON.stringify({ "sessionId": "123", "authKey": "uuid" }),
-      credentials: 'include',
-    })
-    .then(res => res.json())
-    .then(res => {
-        console.log(res);
-    })
-    .catch(err => {
-      console.log(err);
-    })
-  };
+  }
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          app1: web問診票
-        </p>
-        <button onClick={() => apiHandler()}>API送信</button>
-        <button onClick={ () => signOut() }>ログアウト</button>
-      </header>
+      <form onSubmit={handleSubmit}>
+        <h3>テスト認証</h3>
+        <input placeholder="Email" onChange={(e) => setEmail(e.target.value)} value={email} />
+        <input placeholder="Password" type="password" onChange={(e) => setPassword(e.target.value)} value={password} />
+        <button type="submit">Submit</button>
+        <p>{error}</p>
+      </form>
     </div>
   );
 }
