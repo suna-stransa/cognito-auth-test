@@ -4,6 +4,7 @@ import './index.css';
 import { Route, BrowserRouter, Switch } from 'react-router-dom';
 import App from './App';
 import Logout from './Logout';
+import SelectOffice from './SelectOffice';
 import * as serviceWorker from './serviceWorker';
 import AuthContextProvider from './AuthContext';
 
@@ -14,6 +15,7 @@ ReactDOM.render(
         <Switch>
           <Route path="/login/:redirect" component={App} />
           <Route path="/logout/:redirect" component={Logout} />
+          <Route path="/office/:redirect" component={SelectOffice} />
           <Route path="/" component={() => window.location.href = "http://localhost:3001"} />
         </Switch>
       </BrowserRouter>

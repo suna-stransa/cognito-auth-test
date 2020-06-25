@@ -4,6 +4,7 @@ import {AuthContext} from './AuthContext';
 function Logout(props) {
   const {logout} = React.useContext(AuthContext);
   const {match: {params: {redirect}}, history} = props;
+  console.log(props)
 
   React.useEffect(() => {
     (async () => {

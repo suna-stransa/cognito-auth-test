@@ -17,7 +17,8 @@ function App({match: {params: { redirect }}}) {
     e.preventDefault()
     const err = await login(email, password) //loginが成功したらfalseがreturnされる
     if(!err) {
-      window.location.href = decodeURIComponent(redirect) || 'http://localhost:3001';
+      window.location.href = `http://localhost:3000/office/${encodeURIComponent(redirect)}`
+      // window.location.href = decodeURIComponent(redirect) || 'http://localhost:3001';
     } else {
       setError(err);
     }
