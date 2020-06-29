@@ -7,21 +7,13 @@ Amplify.configure(aws_exports);                        // 設定情報をAmplify
 export const AuthContext = createContext();
 
 const AuthContextProvider = (props) => {
-  const [sessionId, setSessionId] = useState(null);
-
   const login = async (email, password) => {
     try {
-      const user = await Auth.signIn(email, password)
-      if(!user.signInUserSession.idToken.payload.sessionId || !user.signInUserSession.idToken.payload.authKey) {
-          return '以外にエラーはなった！'
-      }
-
-      setSessionId(user.signInUserSession.idToken.payload.sessionId)
-      await fetch('https://tooap4mvb3.execute-api.ap-northeast-1.amazonaws.com/demo/', {
+      await fetch('https://ut9ppg22uk.execute-api.ap-northeast-1.amazonaws.com/dev/', {
         method: 'POST',
         body: JSON.stringify({
-          sessionId: user.signInUserSession.idToken.payload.sessionId,
-          authKey: user.signInUserSession.idToken.payload.authKey,
+          userId: email,
+          userPassword: password
         }),
         credentials: 'include',
       })
@@ -33,12 +25,9 @@ const AuthContextProvider = (props) => {
   }
 
   const logout = async () => {
-    Auth.signOut();
-
-    const res = await fetch('https://tooap4mvb3.execute-api.ap-northeast-1.amazonaws.com/demo/', {
+    const res = await fetch('https://ut9ppg22uk.execute-api.ap-northeast-1.amazonaws.com/dev/', {
       method: 'POST',
       body: JSON.stringify({
-        "sessionId": sessionId,
         logout: true,
       }),
       credentials: 'include',

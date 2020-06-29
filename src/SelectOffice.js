@@ -8,6 +8,18 @@ const selectOffice = (props) => {
     window.location.href = redirectURL || 'http://localhost:3001';
   }
 
+  const apiHandler = () => {
+    const result = fetch('https://ut9ppg22uk.execute-api.ap-northeast-1.amazonaws.com/dev/', {
+        method: 'POST',
+        body: JSON.stringify({
+          userId: "",
+          userPassword: ""
+        }),
+        credentials: 'include',
+      })
+    console.log(result)
+  }
+
   const renderOffice = (redirect) => {
     const redirectURL = decodeURIComponent(redirect)
 
@@ -19,6 +31,7 @@ const selectOffice = (props) => {
         <tr>
           <td>医院2</td><td><button onClick={() => clickHandler(redirectURL, "2")}>dental2</button></td>
         </tr>
+        <button onClick={() => apiHandler()}>API call</button>
       </>
     )
   }
