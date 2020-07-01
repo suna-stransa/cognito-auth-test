@@ -13,13 +13,14 @@ const AuthContextProvider = (props) => {
         method: 'POST',
         body: JSON.stringify({
           userId: email,
-          userPassword: password
+          userPassword: password,
+          login: true
         }),
         credentials: 'include',
       })
-      document.cookie = 'sso-authenticated=true; path=/';
       return false;
     } catch(err) {
+      console.log(err);
       return '以外にエラーはなった！';
     }
   }

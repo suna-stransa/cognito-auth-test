@@ -4,7 +4,8 @@ const selectOffice = (props) => {
   const {match: {params: {redirect}}} = props;
 
   const clickHandler = (redirectURL, officeId) => {
-    document.cookie = `officeId=${officeId}; path=/`;
+    document.cookie = 'sso-authenticated=true; max-age=86400; path=/';
+    document.cookie = `officeId=${officeId}; max-age=86400; path=/`;
     window.location.href = redirectURL || 'http://localhost:3001';
   }
 
